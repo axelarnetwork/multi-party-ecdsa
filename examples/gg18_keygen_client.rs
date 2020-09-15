@@ -27,9 +27,12 @@ fn main() {
     if env::args().nth(3).is_some() {
         panic!("too many arguments")
     }
-    if env::args().nth(2).is_none() {
-        panic!("too few arguments")
-    }
+    
+    // use default values for unspecified args
+    // if env::args().nth(2).is_none() {
+    //     panic!("too few arguments")
+    // }
+
     //read parameters:
     let data = fs::read_to_string("params.json")
         .expect("Unable to read params, make sure config file is present in the same folder ");
@@ -257,7 +260,7 @@ fn main() {
         y_sum,
     ))
     .unwrap();
-    fs::write(env::args().nth(2).unwrap(), keygen_json).expect("Unable to save !");
+    fs::write(env::args().nth(2).unwrap_or_else(|| format!("keys{:?}.store", party_num_int)), keygen_json).expect("Unable to save !");
 }
 
 pub fn signup(client: &Client) -> Result<PartySignup, ()> {
